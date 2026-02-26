@@ -1,6 +1,7 @@
 #Entête
-
+import tkinter as tk
 from tkinter import *
+from tkinter import ttk
 
 #Variables, +listes
 
@@ -17,13 +18,13 @@ labels=[[None,None,None,None],[None,None,None,None],[None,None,None,None],[None,
 
 #colors
 
-colors={2:'#FFADAD',4:'#f5b494',8:'#dfbe86',16:'#c3c786',32:'#a3cf94',64:'#85d4ae',
+colors={2:'#ffadad',4:'#f5b494',8:'#dfbe86',16:'#c3c786',32:'#a3cf94',64:'#85d4ae',
         128:'#6ed5cc',256:'#6cd3e7',512:'#84cdfb',1024:'#a9c4ff',2048:'#cebafa',
         4096:'#ebb1e6',8192:'#fcacca',0:'#ebb1e6',}
 
 
-ox = 50
-oy = 150
+ox = 450
+oy = 100
 
 dx = 150
 dy = 150
@@ -36,9 +37,19 @@ def display():
 
 # Programme principal
 window = Tk()
-window.geometry("800x800")
+window.geometry("1200x750")
 window.resizable(0,0)
+window.configure(background='#303030')
 
+sep = tk.Label(bg='#000000')
+sep.config(width=1,height=750)
+sep.place(x=300, y=0)
+
+quit = tk.Button(window,bg='#303030',text='Quit',fg='#ffffff',command=quit,font=('arial',20,'bold'),height=1,width=10)
+quit.place(x=75, y=250)
+
+Retry = tk.Button(window,bg='#303030',text='Restart',fg='#ffffff',font=('arial',20,'bold'),height=1,width=10)
+Retry.place(x=75, y=350)
 
 for line in range(4):
     for col in range(4):
