@@ -40,6 +40,7 @@ window = Tk()
 window.geometry("1200x750")
 window.resizable(0,0)
 window.configure(background='#303030')
+window.title("2048")
 
 sep = tk.Label(bg='#000000')
 sep.config(width=1,height=750)
