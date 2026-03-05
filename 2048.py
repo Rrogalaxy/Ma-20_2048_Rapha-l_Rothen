@@ -4,21 +4,21 @@
 
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk
+import packing as packing
 
 
 #Variables, +listes
 
 #table of the full game
-game=[[2,4,8,16],
-      [32,64,128,256],
-      [512,1024,2048,4096],
-      [8192,0,0,0]]
+#game=[[2,4,8,16],
+#      [32,64,128,256],
+#      [512,1024,2048,4096],
+#      [8192,0,0,0]]
 
-#game=[[None,None,None,None],
-#      [None,None,None,None],
-#      [None,None,None,None],
-#      [None,None,None,None],]
+game=[[0,0,2,2],
+      [2,0,2,2],
+      [0,0,0,0],
+      [2,0,2,0],]
 
 #the table of the tiles
 labels=[[None,None,None,None],[None,None,None,None],[None,None,None,None],[None,None,None,None]]
@@ -38,14 +38,50 @@ dy = 150
 
 #Fonctions
 
+def keypressed(event) :
+    touche=event.keysym
+    if (touche=="Down" or touche=="s" or touche=="S"):
+        down()
+    if (touche=="Up" or touche=="w" or touche=="W"):
+        up()
+    if (touche=="Left" or touche=="a" or touche=="A"):
+        left()
+    if (touche=="Right" or touche=="d" or touche=="D"):
+        right()
+
+def down():
+    for col in range(4):
+        (game[3][col], game[2][col], game[1][col], game[0][col]) = packing.pack4(game[3][col], game[2][col],
+                                                                                 game[1][col], game[0][col])
+    display_grid()
+
+def up():
+    for col in range(4):
+        (game[0][col], game[1][col], game[2][col], game[3][col]) = packing.pack4(game[0][col], game[1][col],
+                                                                                 game[2][col], game[3][col])
+    display_grid()
+
+def left():
+    for line in range(4):
+        (game[line][0], game[line][1], game[line][2], game[line][3]) = packing.pack4(game[line][0], game[line][1],
+                                                                                 game[line][2], game[line][3])
+    display_grid()
+
+def right():
+    for line in range(4):
+        (game[line][3], game[line][2], game[line][1], game[line][0]) = packing.pack4(game[line][3], game[line][2],
+                                                                                 game[line][1], game[line][0])
+    display_grid()
+
+
 def display_grid():
     #mettre l'affichage à jour en fonction de la grille
-    for row in range(4):
+    for line in range(4):
         for col in range(4):
             value = game[line][col] #on prends la valeur de la tuile
-            font_color = "#303030" if 0 < value < 4000 else "#000000"
+            font_color = "#303030" if 0 < value < 4000 else "#303030"
             labels[line][col].configure(text=value,bg=colors[value],fg=font_color)
-            #POURQOI LES 0 NNE CHANGENT PAS DE COULEUR ???
+
 
 # Programme principal
 window = Tk()
@@ -76,6 +112,6 @@ for line in range(4):
 
 
 
-
+window.bind('<Key>',keypressed)
 display_grid()
 mainloop()
