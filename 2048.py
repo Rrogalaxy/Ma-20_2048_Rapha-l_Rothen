@@ -1,10 +1,12 @@
 #jeu du 2048
 #auteur : Raphaël Rothen
-
-
+import random
 import tkinter as tk
+from random import randint
 from tkinter import *
 import packing as packing
+import random as rand
+
 
 
 #Variables, +listes
@@ -16,8 +18,8 @@ import packing as packing
 #      [8192,0,0,0]]
 
 game=[[0,0,0,0],
-      [0,4,2,0],
-      [0,2,2,0],
+      [0,2,0,0],
+      [0,0,2,0],
       [0,0,0,0],]
 
 #the table of the tiles
@@ -39,6 +41,18 @@ dy = 150
 #Fonctions
 
 
+#cette fonction permet de créer des nouveau blocks dans des cases vides
+def block_spawn():
+    found = 0
+    while not found:
+        line = randint(0,3)
+        col = randint(0,3)
+        if game[line][col] == 0:
+            found = 1
+    game[line][col] = random.choice([2,2,2,2,4])
+
+
+
 #cette fonction ci-dessous check quand on appuie sur les diférentes touches qui altèrent le jeux
 def keypressed(event) :
     touche=event.keysym
@@ -52,33 +66,55 @@ def keypressed(event) :
         right()
 
 #envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers le bas
+#récupère également si il y a eu des mouvements
 def down():
+    tot_move=0
     for col in range(4):
-        (game[3][col], game[2][col], game[1][col], game[0][col]) = packing.pack4(game[3][col], game[2][col],
+        (game[3][col], game[2][col], game[1][col], game[0][col],move) = packing.pack4(game[3][col], game[2][col],
                                                                                  game[1][col], game[0][col])
+        tot_move += move
+    if tot_move != 0:
+        block_spawn()
+
     display_grid()
 
 #envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers le haut
 def up():
+    tot_move=0
     for col in range(4):
-        (game[0][col], game[1][col], game[2][col], game[3][col]) = packing.pack4(game[0][col], game[1][col],
+
+        (game[0][col], game[1][col], game[2][col], game[3][col],move) = packing.pack4(game[0][col], game[1][col],
                                                                                  game[2][col], game[3][col])
+        tot_move += move
+    if tot_move != 0:
+        block_spawn()
+
     display_grid()
 
 
 #envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers la gauche
 def left():
+    tot_move=0
     for line in range(4):
-        (game[line][0], game[line][1], game[line][2], game[line][3]) = packing.pack4(game[line][0], game[line][1],
+        (game[line][0], game[line][1], game[line][2], game[line][3],move) = packing.pack4(game[line][0], game[line][1],
                                                                                  game[line][2], game[line][3])
+        tot_move += move
+    if tot_move != 0:
+        block_spawn()
+
     display_grid()
 
 
 #envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers la droite
 def right():
+    tot_move=0
     for line in range(4):
-        (game[line][3], game[line][2], game[line][1], game[line][0]) = packing.pack4(game[line][3], game[line][2],
+        (game[line][3], game[line][2], game[line][1], game[line][0],move) = packing.pack4(game[line][3], game[line][2],
                                                                                  game[line][1], game[line][0])
+        tot_move += move
+    if tot_move != 0:
+        block_spawn()
+
     display_grid()
 
 
