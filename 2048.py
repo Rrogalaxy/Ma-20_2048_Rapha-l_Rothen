@@ -15,10 +15,10 @@ import packing as packing
 #      [512,1024,2048,4096],
 #      [8192,0,0,0]]
 
-game=[[0,0,2,2],
-      [2,0,2,2],
-      [0,0,0,0],
-      [2,0,2,0],]
+game=[[0,0,0,0],
+      [0,4,2,0],
+      [0,2,2,0],
+      [0,0,0,0],]
 
 #the table of the tiles
 labels=[[None,None,None,None],[None,None,None,None],[None,None,None,None],[None,None,None,None]]
@@ -38,6 +38,8 @@ dy = 150
 
 #Fonctions
 
+
+#cette fonction ci-dessous check quand on appuie sur les diférentes touches qui altèrent le jeux
 def keypressed(event) :
     touche=event.keysym
     if (touche=="Down" or touche=="s" or touche=="S"):
@@ -49,24 +51,30 @@ def keypressed(event) :
     if (touche=="Right" or touche=="d" or touche=="D"):
         right()
 
+#envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers le bas
 def down():
     for col in range(4):
         (game[3][col], game[2][col], game[1][col], game[0][col]) = packing.pack4(game[3][col], game[2][col],
                                                                                  game[1][col], game[0][col])
     display_grid()
 
+#envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers le haut
 def up():
     for col in range(4):
         (game[0][col], game[1][col], game[2][col], game[3][col]) = packing.pack4(game[0][col], game[1][col],
                                                                                  game[2][col], game[3][col])
     display_grid()
 
+
+#envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers la gauche
 def left():
     for line in range(4):
         (game[line][0], game[line][1], game[line][2], game[line][3]) = packing.pack4(game[line][0], game[line][1],
                                                                                  game[line][2], game[line][3])
     display_grid()
 
+
+#envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers la droite
 def right():
     for line in range(4):
         (game[line][3], game[line][2], game[line][1], game[line][0]) = packing.pack4(game[line][3], game[line][2],
