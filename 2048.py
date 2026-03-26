@@ -134,6 +134,8 @@ def keypressed(event) :
         left()
     if (touche=="Right" or touche=="d" or touche=="D"):
         right()
+    if (touche=="enter" and cheats.get() != None or touche=="ENTER" and cheats.get() == None):
+        cheat()
 
 #envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers le bas
 #récupère également si il y a eu des mouvements
@@ -214,6 +216,10 @@ def display_grid():
             labels[line][col].configure(text=value,bg=colors[value],fg=font_color)
 
 
+#fonction des cheat codes et easter eggs
+
+def cheat():
+    print("yippi")
 
 # Programme principal
 window = Tk()
@@ -230,6 +236,9 @@ sep.place(x=300, y=0)
 back = tk.Label(bg='#000000', height=43, width=93)
 back.place(x=400, y=50)
 
+code = tk.Label(bg='#303030', text="Codes", font=('arial', 20, 'bold'))
+code.place(x=75, y=110)
+
 #les bouttons
 quit = tk.Button(window,bg='#303030',text='Quit',fg='#ffffff',command=quit,font=('arial',20,'bold'),height=1,width=10)
 quit.place(x=75, y=250)
@@ -237,6 +246,10 @@ quit.place(x=75, y=250)
 Retry = tk.Button(window,bg='#303030',text='Restart',fg='#ffffff',font=('arial',20,'bold'),height=1,width=10)
 Retry.place(x=75, y=350)
 
+
+#l'entry des cheat codes
+cheats = tk.Entry(window,bg='#303030',fg='#ffffff',width=30)
+cheats.place(x=75, y=150)
 
 #création des blocs
 for line in range(4):
