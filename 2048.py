@@ -62,7 +62,16 @@ def block_spawn():
             found = 1
     game[line][col] = random.choice([2,2,2,2,4])
 
-
+#cette fonction réinitialise l'état du jeu
+def restart():
+    global won
+    for col in range(4):
+        for row in range(4):
+            game[row][col] = game[row][col] * 0
+    game[2][2] = 2
+    game[1][1] = 2
+    won = 0
+    display_grid()
 
 
 #cette fonction vérifie l'état du jeu si il y a un 2048
@@ -134,8 +143,7 @@ def keypressed(event) :
         left()
     if (touche=="Right" or touche=="d" or touche=="D"):
         right()
-    if (touche=="enter" and cheats.get() != None or touche=="ENTER" and cheats.get() == None):
-        cheat()
+
 
 #envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers le bas
 #récupère également si il y a eu des mouvements
@@ -217,9 +225,64 @@ def display_grid():
 
 
 #fonction des cheat codes et easter eggs
+def child(): #la fenetre des codes
 
-def cheat():
-    print("yippi")
+    #fonctions qui observe l'entry et utilise un cheat si le code est correct
+    def cheat():
+        #double la valeur de toute les cases
+        if entry_code.get() == "double":
+            for col in range(4):
+                for row in range(4):
+                    game[row][col] = game[row][col]*2
+                    display_grid()
+
+        #fait apparaitre une page qui explique toute les commandes
+        elif entry_code.get() == "help":
+            #la page d'aide
+            helping = tk.Toplevel()
+            helping.title("Help")
+            helping.resizable(0, 0)
+            helping.geometry("400x400")
+
+            #le label d'aide
+            helps = tk.Label(helping, text=f""" here are all the cheat codes:
+            - help : shows a page with every single commands
+            - double : doubles the value of every block
+            - RDM : does a random move""", justify=tk.LEFT)
+            helps.pack()
+
+        #faits un mouvement aléatoire parmis les 4 disponible
+        elif entry_code.get() == "RDM":
+            choice = random.choice(["left", "right", "down" , "up" ])
+            if choice == "left":
+                left()
+            elif choice == "right":
+                right()
+            elif choice == "down":
+                down()
+            elif choice == "up":
+                up()
+
+
+
+
+    cheating = tk.Toplevel()
+    cheating.title("cheat codes")
+    cheating.resizable(False, False)
+    cheating.config(background="#303030")
+
+    #labels des codes
+    label_codes = tk.Label(cheating, text="codes", bg="#303030", fg="#FFFFFF", font=("Arial", 15, "bold"))
+    label_codes.place(x=10, y=30)
+
+    #entry des codes
+    entry_code = tk.Entry(cheating, bg="#303030", fg="#FFFFFF", font=("Arial", 15, "bold"), width=15)
+    entry_code.place(x=10, y=60)
+
+    button_code = tk.Button(cheating,text="valider",bg="#303030", fg="#FFFFFF", command=cheat)
+    button_code.place(x=10, y=90)
+
+
 
 # Programme principal
 window = Tk()
@@ -236,20 +299,18 @@ sep.place(x=300, y=0)
 back = tk.Label(bg='#000000', height=43, width=93)
 back.place(x=400, y=50)
 
-code = tk.Label(bg='#303030', text="Codes", font=('arial', 20, 'bold'))
-code.place(x=75, y=110)
 
 #les bouttons
 quit = tk.Button(window,bg='#303030',text='Quit',fg='#ffffff',command=quit,font=('arial',20,'bold'),height=1,width=10)
 quit.place(x=75, y=250)
 
-Retry = tk.Button(window,bg='#303030',text='Restart',fg='#ffffff',font=('arial',20,'bold'),height=1,width=10)
+Retry = tk.Button(window,bg='#303030',text='Restart',fg='#ffffff',font=('arial',20,'bold'),height=1,width=10,command=restart)
 Retry.place(x=75, y=350)
 
-
-#l'entry des cheat codes
-cheats = tk.Entry(window,bg='#303030',fg='#ffffff',width=30)
+cheats = tk.Button(window,bg='#303030',fg='#ffffff',text="CODES",command=child,font=('arial',20,'bold'))
 cheats.place(x=75, y=150)
+
+
 
 #création des blocs
 for line in range(4):
