@@ -37,7 +37,7 @@ labels=[[None,None,None,None],[None,None,None,None],[None,None,None,None],[None,
 #les differentes couleurs des blocs
 colors={2:'#ffadad',4:'#f5b494',8:'#dfbe86',16:'#c3c786',32:'#a3cf94',64:'#85d4ae',
         128:'#6ed5cc',256:'#6cd3e7',512:'#84cdfb',1024:'#a9c4ff',2048:'#cebafa',
-        4096:'#ebb1e6',8192:'#fcacca',0:'#303030',}
+        4096:'#ebb1e6',8192:'#fcacca',16384:'#ffffff',32768:'#ffffff',65536:'#ffffff',131072:'#ffffff',0:'#303030'}
 
 #les positions pour le placement de cases
 ox = 450
@@ -65,9 +65,10 @@ def block_spawn():
 #cette fonction réinitialise l'état du jeu
 def restart():
     global won
+    global game
     for col in range(4):
         for row in range(4):
-            game[row][col] = game[row][col] * 0
+            game[row][col] = 0
     game[2][2] = 2
     game[1][1] = 2
     won = 0
@@ -130,6 +131,26 @@ def check_fail():
     if check_twin() == False and check_full_board() == True:
         tk.messagebox.showinfo(message="Game Over", title="you lost")
 
+#vérifie si le joueur monte trop loin dans les nombres et restart le jeu si c'est le cas
+def check_too_much():
+    too_much = False
+    for col in range(4):
+        for line in range(4):
+            # si le joueur atteind la case 131072, un flag se lance
+            if game[line][col] >= 131072 :
+                too_much = True
+
+    if too_much:
+        #si le flaf s'active, une message box apparait donnant l'llusion d'un choix est restart le jeu
+        #je sais que ce n'est pas nécessaire mais je voulais garder un de mes trucs signature qu'est de narguer le joueur
+        rep = tk.messagebox.askyesno(message="You went too far, please restart now you little cheater >:3",
+                                     title="calm down bro")
+        if rep == 1:
+            tk.messagebox.showinfo(message="the game got restarted", title="restarted")
+        else:
+            tk.messagebox.showinfo(message="don't worry I restarted it for you :3", title="restarted")
+        restart()
+
 
 
 #cette fonction ci-dessous check quand on appuie sur les diférentes touches qui altèrent le jeux
@@ -161,6 +182,7 @@ def down():
     display_grid()
     check_win()
     check_fail()
+    check_too_much()
 
 
 #envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers le haut
@@ -179,6 +201,7 @@ def up():
     display_grid()
     check_win()
     check_fail()
+    check_too_much()
 
 
 #envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers la gauche
@@ -196,6 +219,7 @@ def left():
     display_grid()
     check_win()
     check_fail()
+    check_too_much()
 
 
 #envoie les valeur du tableau à la fonction pack4 qui permettra de décaler et fusionner les nombre vers la droite
@@ -213,6 +237,7 @@ def right():
     display_grid()
     check_win()
     check_fail()
+    check_too_much()
 
 
 def display_grid():
@@ -235,6 +260,7 @@ def child(): #la fenetre des codes
                 for row in range(4):
                     game[row][col] = game[row][col]*2
                     display_grid()
+            check_too_much()
 
         #fait apparaitre une page qui explique toute les commandes
         elif entry_code.get() == "help":
